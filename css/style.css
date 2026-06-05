@@ -337,6 +337,28 @@ main { flex: 1; }
 .faq-answer p + p { margin-top: 0.75rem; }
 .faq-answer a { color: var(--accent); }
 
+.faq-q-text { flex: 1; }
+
+.faq-copy-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 1.6rem;
+  height: 1.6rem;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  border-radius: 4px;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.15s, color 0.15s, background 0.15s;
+}
+.faq-list summary:hover .faq-copy-btn,
+.faq-list details[open] .faq-copy-btn { opacity: 1; }
+.faq-copy-btn:hover { color: var(--accent); background: var(--bg-subtle); }
+.faq-copy-btn--copied { color: var(--accent); opacity: 1; }
+
 .faq-category {
   font-size: 0.72rem;
   font-weight: 700;

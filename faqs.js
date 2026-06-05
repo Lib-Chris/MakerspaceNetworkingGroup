@@ -45,7 +45,7 @@
       id: "meetings",
       category: "General",
       q: "When do MNG meetings take place?",
-      a: 'Check the <a href="meetings.html">Meetings page</a> for the current schedule. Meetings are held virtually and meeting links are posted in the MNG Discord.'
+      a: 'MNG meets quarterly in person. Virtual meetings may be scheduled on an as-needed basis. Check the <a href="meetings.html">Meetings page</a> for the current schedule, and keep an eye on the Discord and e-mail list for announcements.'
     },
     {
       id: "contribute-materials",
@@ -57,11 +57,13 @@
       id: "update-site",
       category: "General",
       q: "How do I update or correct information on this site?",
-      a: "This site is hosted on GitHub Pages. Any MNG staff member with access to the repository can edit the files directly in the GitHub web interface — no coding experience required. Contact your site administrator for access."
+      a: "This site is hosted on GitHub Pages. Any approved MNG member with access to the repository can edit the files directly in the GitHub web interface — no coding experience required. Contact your site administrator for access."
     },
 
     // ----- ADD NEW FAQs ABOVE THIS LINE -----
   ];
+
+  const linkIcon = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>`;
 
   // Group FAQs by category, preserving insertion order
   const groups = [];
@@ -78,7 +80,10 @@
     const listItems = items.map(({ id, q, a }) => `
     <li>
       <details id="${id}">
-        <summary>${q}</summary>
+        <summary>
+          <span class="faq-q-text">${q}</span>
+          <button class="faq-copy-btn" data-id="${id}" aria-label="Copy link to this question">${linkIcon}</button>
+        </summary>
         <div class="faq-answer"><p>${a}</p></div>
       </details>
     </li>`).join("");
@@ -90,13 +95,39 @@
 
   document.currentScript.insertAdjacentHTML("afterend", html);
 
-  // Auto-open and scroll to a linked FAQ when the URL has a hash
   document.addEventListener("DOMContentLoaded", function () {
-    const id = location.hash.slice(1);
-    if (!id) return;
-    const el = document.getElementById(id);
-    if (!el) return;
-    if (el.tagName === "DETAILS") el.open = true;
-    el.scrollIntoView({ behavior: "smooth", block: "start" });
+    // Auto-open and scroll if URL has a hash on load
+    const hash = location.hash.slice(1);
+    if (hash) {
+      const el = document.getElementById(hash);
+      if (el && el.tagName === "DETAILS") {
+        el.open = true;
+        setTimeout(() => el.scrollIntoView({ behavior: "smooth", block: "start" }), 50);
+      }
+    }
+
+    // Update URL bar when a question is opened
+    document.querySelectorAll(".faq-list details").forEach(details => {
+      details.addEventListener("toggle", function () {
+        if (this.open) {
+          history.replaceState(null, "", "#" + this.id);
+        } else if (location.hash === "#" + this.id) {
+          history.replaceState(null, "", location.pathname);
+        }
+      });
+    });
+
+    // Copy link button
+    document.querySelectorAll(".faq-copy-btn").forEach(btn => {
+      btn.addEventListener("click", function (e) {
+        e.stopPropagation(); // don't toggle the details open/closed
+        e.preventDefault();
+        const url = location.origin + location.pathname + "#" + this.dataset.id;
+        navigator.clipboard.writeText(url).then(() => {
+          this.classList.add("faq-copy-btn--copied");
+          setTimeout(() => this.classList.remove("faq-copy-btn--copied"), 1500);
+        });
+      });
+    });
   });
 })();
