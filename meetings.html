@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="View upcoming Makerspace Networking Group meetings and events.">
+  <title>Meetings — Makerspace Networking Group of Illinois</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  <script src="nav.js"></script>
+
+  <main id="main-content">
+    <div class="page-content">
+
+      <div class="page-heading">
+        <h2>Meetings</h2>
+        <p>Upcoming MNG meetings and events.</p>
+      </div>
+
+      <p class="intro">
+        MNG meets regularly to share updates, discuss challenges, and collaborate. All dates and times
+        are listed in the calendar below. Meeting links are shared in our Discord.
+      </p>
+
+      <!-- =====================================================
+           CALENDAR EMBED
+           To update: replace the src URL below with your
+           public Google Calendar embed URL.
+           Steps:
+             1. Open Google Calendar
+             2. Click the three dots next to the calendar name
+             3. Select "Settings and sharing"
+             4. Scroll to "Integrate calendar" > copy the
+                "Embed code" src URL
+             5. Paste it into the iframe src attribute below
+           ===================================================== -->
+      <div class="calendar-wrapper">
+        <iframe
+          src="https://calendar.google.com/calendar/embed?src=REPLACE_WITH_YOUR_CALENDAR_ID%40group.calendar.google.com&ctz=America%2FChicago"
+          title="MNG Meetings Calendar"
+          width="800"
+          height="500"
+          frameborder="0"
+          scrolling="no"
+          loading="lazy"
+          aria-label="Google Calendar showing upcoming MNG meetings">
+        </iframe>
+        <p class="calendar-fallback">
+          Can&rsquo;t see the calendar?
+          <a href="https://calendar.google.com/calendar/r" target="_blank" rel="noopener noreferrer">
+            Open Google Calendar directly
+          </a>
+        </p>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <p>Makerspace Networking Group of Illinois</p>
+    <p>To update this site, edit the HTML files in the GitHub repository.</p>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MNG Color Palette Preview</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f1f5f9; padding: 2rem; }
+    h1 { text-align: center; font-size: 1.1rem; color: #475569; margin-bottom: 2rem; font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase; }
+
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(420px, 1fr)); gap: 2rem; }
+
+    .palette { border-radius: 16px; overflow: hidden; box-shadow: 0 4px 24px rgb(0 0 0/15%); }
+    .palette__label { padding: 0.6rem 1rem; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; text-align: center; }
+
+    /* NAV */
+    .palette__nav { display: flex; justify-content: center; gap: 0; padding: 0 1rem; }
+    .palette__nav a { display: block; padding: 0.6rem 0.7rem; font-size: 0.8rem; font-weight: 500; text-decoration: none; border-bottom: 2px solid transparent; white-space: nowrap; }
+
+    /* HERO */
+    .palette__hero { padding: 2.5rem 2rem; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 0.6rem; }
+    .palette__logo { width: 72px; height: 72px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; font-weight: 800; margin-bottom: 0.4rem; }
+    .palette__name { font-size: 1.4rem; font-weight: 800; letter-spacing: -0.025em; }
+    .palette__tagline { font-size: 0.85rem; font-style: italic; }
+    .palette__desc { font-size: 0.8rem; line-height: 1.5; max-width: 280px; }
+    .palette__btns { display: flex; gap: 0.6rem; flex-wrap: wrap; justify-content: center; margin-top: 0.4rem; }
+    .btn { padding: 0.55rem 1.2rem; border-radius: 9999px; font-size: 0.82rem; font-weight: 600; text-decoration: none; cursor: default; }
+
+    /* ── 1. FORGE ── */
+    .forge .palette__label  { background: #292524; color: #fb923c; }
+    .forge .palette__nav    { background: #1c1917; }
+    .forge .palette__nav a  { color: rgba(255,255,255,0.5); }
+    .forge .palette__nav a.active { color: #fb923c; border-bottom-color: #fb923c; }
+    .forge .palette__hero   { background: linear-gradient(160deg, #1c1917 0%, #3b1e0a 60%, #1c1917 100%); }
+    .forge .palette__logo   { background: #fff; color: #1c1917; }
+    .forge .palette__name   { color: #fff; }
+    .forge .palette__tagline { color: rgba(255,255,255,0.45); }
+    .forge .palette__desc   { color: rgba(255,255,255,0.6); }
+    .forge .btn-primary     { background: #f97316; color: #fff; box-shadow: 0 4px 14px rgb(249 115 22/40%); }
+    .forge .btn-outline     { border: 2px solid rgba(255,255,255,0.3); color: rgba(255,255,255,0.85); }
+
+    /* ── 2. CIRCUIT ── */
+    .circuit .palette__label { background: #0a0f1e; color: #10b981; }
+    .circuit .palette__nav   { background: #080c18; }
+    .circuit .palette__nav a { color: rgba(255,255,255,0.5); }
+    .circuit .palette__nav a.active { color: #10b981; border-bottom-color: #10b981; }
+    .circuit .palette__hero  { background: linear-gradient(160deg, #080c18 0%, #0a2318 55%, #080c18 100%); }
+    .circuit .palette__logo  { background: #fff; color: #080c18; }
+    .circuit .palette__name  { color: #fff; }
+    .circuit .palette__tagline { color: rgba(255,255,255,0.45); }
+    .circuit .palette__desc  { color: rgba(255,255,255,0.6); }
+    .circuit .btn-primary    { background: #10b981; color: #fff; box-shadow: 0 4px 14px rgb(16 185 129/40%); }
+    .circuit .btn-outline    { border: 2px solid rgba(255,255,255,0.3); color: rgba(255,255,255,0.85); }
+
+    /* ── 3. BLUEPRINT ── */
+    .blueprint .palette__label { background: #0a1628; color: #38bdf8; }
+    .blueprint .palette__nav   { background: #071020; }
+    .blueprint .palette__nav a { color: rgba(255,255,255,0.5); }
+    .blueprint .palette__nav a.active { color: #38bdf8; border-bottom-color: #38bdf8; }
+    .blueprint .palette__hero  { background: linear-gradient(160deg, #071020 0%, #0c2a4a 55%, #071020 100%); }
+    .blueprint .palette__logo  { background: #fff; color: #071020; }
+    .blueprint .palette__name  { color: #fff; }
+    .blueprint .palette__tagline { color: rgba(255,255,255,0.45); }
+    .blueprint .palette__desc  { color: rgba(255,255,255,0.6); }
+    .blueprint .btn-primary    { background: #38bdf8; color: #0a1628; box-shadow: 0 4px 14px rgb(56 189 248/40%); }
+    .blueprint .btn-outline    { border: 2px solid rgba(255,255,255,0.3); color: rgba(255,255,255,0.85); }
+
+    /* ── 4. LASER ── */
+    .laser .palette__label { background: #0f0a1e; color: #d946ef; }
+    .laser .palette__nav   { background: #0a0714; }
+    .laser .palette__nav a { color: rgba(255,255,255,0.5); }
+    .laser .palette__nav a.active { color: #d946ef; border-bottom-color: #d946ef; }
+    .laser .palette__hero  { background: linear-gradient(160deg, #0a0714 0%, #1a0a2e 55%, #0a0714 100%); }
+    .laser .palette__logo  { background: #fff; color: #0a0714; }
+    .laser .palette__name  { color: #fff; }
+    .laser .palette__tagline { color: rgba(255,255,255,0.45); }
+    .laser .palette__desc  { color: rgba(255,255,255,0.6); }
+    .laser .btn-primary    { background: #d946ef; color: #fff; box-shadow: 0 4px 14px rgb(217 70 239/40%); }
+    .laser .btn-outline    { border: 2px solid rgba(255,255,255,0.3); color: rgba(255,255,255,0.85); }
+  </style>
+</head>
+<body>
+
+  <h1>MNG — Color Palette Options</h1>
+
+  <div class="grid">
+
+    <!-- 1. FORGE -->
+    <div class="palette forge">
+      <div class="palette__label">1 — Forge (charcoal + orange)</div>
+      <div class="palette__nav">
+        <a class="active">Home</a><a>Meetings</a><a>Resources</a><a>FAQs</a><a>Lesson Plans</a>
+      </div>
+      <div class="palette__hero">
+        <div class="palette__logo">MNG</div>
+        <div class="palette__name">Makerspace Networking Group</div>
+        <div class="palette__tagline">Making making easier.</div>
+        <div class="palette__desc">An Illinois-based network of library makerspace staff — connecting professionals and building community.</div>
+        <div class="palette__btns">
+          <span class="btn btn-primary">Join our Discord</span>
+          <span class="btn btn-outline">Explore Resources</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. CIRCUIT -->
+    <div class="palette circuit">
+      <div class="palette__label">2 — Circuit (midnight + teal)</div>
+      <div class="palette__nav">
+        <a class="active">Home</a><a>Meetings</a><a>Resources</a><a>FAQs</a><a>Lesson Plans</a>
+      </div>
+      <div class="palette__hero">
+        <div class="palette__logo">MNG</div>
+        <div class="palette__name">Makerspace Networking Group</div>
+        <div class="palette__tagline">Making making easier.</div>
+        <div class="palette__desc">An Illinois-based network of library makerspace staff — connecting professionals and building community.</div>
+        <div class="palette__btns">
+          <span class="btn btn-primary">Join our Discord</span>
+          <span class="btn btn-outline">Explore Resources</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. BLUEPRINT -->
+    <div class="palette blueprint">
+      <div class="palette__label">3 — Blueprint (deep blue + cyan)</div>
+      <div class="palette__nav">
+        <a class="active">Home</a><a>Meetings</a><a>Resources</a><a>FAQs</a><a>Lesson Plans</a>
+      </div>
+      <div class="palette__hero">
+        <div class="palette__logo">MNG</div>
+        <div class="palette__name">Makerspace Networking Group</div>
+        <div class="palette__tagline">Making making easier.</div>
+        <div class="palette__desc">An Illinois-based network of library makerspace staff — connecting professionals and building community.</div>
+        <div class="palette__btns">
+          <span class="btn btn-primary">Join our Discord</span>
+          <span class="btn btn-outline">Explore Resources</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. LASER -->
+    <div class="palette laser">
+      <div class="palette__label">4 — Laser (dark purple + magenta)</div>
+      <div class="palette__nav">
+        <a class="active">Home</a><a>Meetings</a><a>Resources</a><a>FAQs</a><a>Lesson Plans</a>
+      </div>
+      <div class="palette__hero">
+        <div class="palette__logo">MNG</div>
+        <div class="palette__name">Makerspace Networking Group</div>
+        <div class="palette__tagline">Making making easier.</div>
+        <div class="palette__desc">An Illinois-based network of library makerspace staff — connecting professionals and building community.</div>
+        <div class="palette__btns">
+          <span class="btn btn-primary">Join our Discord</span>
+          <span class="btn btn-outline">Explore Resources</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>
