@@ -123,10 +123,31 @@
         e.stopPropagation(); // don't toggle the details open/closed
         e.preventDefault();
         const url = location.origin + location.pathname + "#" + this.dataset.id;
-        navigator.clipboard.writeText(url).then(() => {
-          this.classList.add("faq-copy-btn--copied");
-          setTimeout(() => this.classList.remove("faq-copy-btn--copied"), 1500);
-        });
+        const btn = this;
+
+        function markCopied() {
+          btn.classList.add("faq-copy-btn--copied");
+          setTimeout(() => btn.classList.remove("faq-copy-btn--copied"), 1500);
+        }
+
+        // Modern clipboard API (most browsers)
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(url).then(markCopied).catch(fallback);
+        } else {
+          fallback();
+        }
+
+        // iOS Safari fallback via hidden textarea + execCommand
+        function fallback() {
+          const ta = document.createElement("textarea");
+          ta.value = url;
+          ta.style.cssText = "position:fixed;opacity:0;top:0;left:0;";
+          document.body.appendChild(ta);
+          ta.focus();
+          ta.select();
+          try { document.execCommand("copy"); markCopied(); } catch (_) {}
+          document.body.removeChild(ta);
+        }
       });
     });
   });
